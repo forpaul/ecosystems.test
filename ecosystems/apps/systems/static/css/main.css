@@ -1,0 +1,46 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #dcdcdc;
+}
+.container{
+    width: 90%;
+    margin: 0 auto
+}
+#accessForm input{
+    display: block;
+    height: 30px;
+    border:none;
+    /*border-bottom: 1px solid black;*/
+    border-radius: 5px;
+    margin: 20px;
+    padding: 5px;
+    width: 20%;
+    outline: none;
+}
+#accessForm #submit{
+    cursor: pointer;
+    background-color: grey;
+}
+.showAccesses {
+    font-size: 20px;
+}
+#hiddenInfo{
+    display: none;
+}
+.showServices divs{
+    display: none;
+}
+.showServices input{
+   display: block;
+    height: 25px;
+    border:none;
+    /*border-bottom: 1px solid black;*/
+    border-radius: 5px;
+    margin: 20px;
+    padding: 5px;
+    width: 20%;
+    outline: none;
+    cursor: pointer;
+}
+

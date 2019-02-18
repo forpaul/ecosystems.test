@@ -1,0 +1,73 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+</head>
+<script language="JavaScript" type="text/JavaScript">
+    function spoiler(n) {
+        element = document.getElementById(n)
+        if (element.style.display == 'none')
+            element.style.display = 'block'
+        else element.style.display = 'none';
+    }
+    function showHide(n) {
+        var encr = document.getElementById(n);
+        if (encr.type == 'password')
+            encr.type = 'text'
+        else encr.type = 'password';
+    }
+</script>
+<div class="container">
+    <div class="login">
+    {% if user.is_active == False %}
+        <form id="accessForm" action="auth/" method="post">
+            {% csrf_token %}
+            <input type="text" required placeholder="Login" name="login">
+            <input type="password" required placeholder="Password" name="password">
+            <input id="submit" type="submit" value="Add access">
+        </form>
+
+    {% else %}
+        <a href="logout/">Logout</a>
+    {% endif %}
+    </div>
+    <div class="accesses">
+        <form id="accessForm" action="access/" method="post">
+            {% csrf_token %}
+            <input type="text" required placeholder="Title" name="title">
+            <input type="text" required placeholder="Service" name="service">
+            <input type="text" required placeholder="Login" name="login">
+            <input type="password" required placeholder="Password" name="password">
+            <input type="text" required placeholder="Comment" name="comment">
+            <input type="text" required placeholder="Owner" name="owner">
+            <input id="submit" type="submit" value="Add access">
+        </form>
+    </div>
+    <h3>Accesses</h3>
+    <div class="showServices">
+        {% for access in Accesses %}
+            <p style="cursor:pointer; color: black; text-decoration: none" href="#/"
+               onclick="spoiler({{ access.id }})">{{ access.service }}</p>
+            <form style="display: none" id="{{ access.id }}" action="change/" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ access.id }}">
+                <input type="text" name="title" value="{{ access.title }}">
+                <input type="text" name="service" value="{{ access.service }}">
+                <input type="text" name="login" value="{{ access.login }}">
+                <input type="password" name="password" id="id{{ access.id }}" value="{{ access.password }}">
+                <p style="cursor: pointer; color: black; text-decoration: none" onclick="showHide('id'+{{ access.id }})">Show
+                    password</p>
+                <input type="text" name="comment" value="{{ access.comment }}">
+                <input type="text" name="owner" value="{{ access.owner }}">
+                <input type="submit" value="Change access">
+                <input type="submit" formaction="delete/" id="submit" value="Delete access">
+            </form>
+            <hr>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
