@@ -1,0 +1,11 @@
+{% extends 'layouts/base_layout.html' %}
+{% block content %}
+  <form id="accessForm" action="auth/" method="post">
+      {% csrf_token %}
+      <input type="text" required placeholder="Login" name="login">
+      <input type="password" required placeholder="Password" name="password">
+      <input id="submit" type="submit" value="Log in">
+  </form>
+<p id="errorAuth">Авторизуйтесь, чтобы увидеть свои доступы</p>
+<p id="errorAuth">Для получения данных для входа и возможность добавлять доступы, обратитесь к главному администратору.</p>
+{% endblock %}

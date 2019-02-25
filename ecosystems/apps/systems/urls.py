@@ -3,5 +3,5 @@ from django.urls import path
 from ecosystems.apps.systems import views
 
 urlpatterns = [
-    path('', views.index),
+    path('', views.log_in),
 ]

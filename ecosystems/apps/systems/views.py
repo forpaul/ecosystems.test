@@ -1,15 +1,18 @@
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth import logout
 from .models import Accesses
-from passlib.hash import pbkdf2_sha256
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 
-def index(request):
-    allAccesses = Accesses.objects.all();
-    return render(request, "index.html", {'Accesses': allAccesses})
+def log_in(request):
+    if 'login' not in request.session:
+        return render(request, "login.html", {})
+    else:
+        allAccesses = Accesses.objects.filter(owner=request.session['login'])
+        users = User.objects.all()
+        return render(request, "index.html", {'Accesses': allAccesses})
 
 
 def addAccess(request):
@@ -21,15 +24,12 @@ def addAccess(request):
         comment = request.POST.get('comment')
         owner = request.POST.get('owner')
 
-    enc_password = pbkdf2_sha256.hash(password)
-
     if User.is_active:
-        request.session['login'] = login
-        dataAccess = Accesses(title=title, service=service, login=login, password=enc_password, comment=comment,
+        dataAccess = Accesses(title=title, service=service, login=login, password=password, comment=comment,
                               owner=request.session['login'])
 
     user = User.objects.create_user(username=login, password=password, first_name=owner)
-    user.is_active = False
+    user.is_active = True
     user.save()
     dataAccess.save()
     return HttpResponseRedirect("/")
@@ -65,6 +65,7 @@ def auth(request):
     if user is not None:
         if user.is_active:
             login(request, user)
+            request.session['login'] = username
             print("User is valid, active and authenticated")
         else:
             print("The password is valid, but the account has been disabled!")
